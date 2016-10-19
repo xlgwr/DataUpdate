@@ -69,7 +69,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             }
             catch (Exception ex)
             {
-                _form1 = f;                
+                _form1 = f;
             }
         }
 
@@ -89,7 +89,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             }
             catch (Exception ex)
             {
-                _form1 = f;               
+                _form1 = f;
             }
         }
         #region cust_approved（前端帐号）及 am_cust_approved（自动监察帐号）
@@ -240,14 +240,14 @@ namespace EMMS.UpdateOldDBToNew.Service
                                 {
                                     icountSaveAll++;
                                     msg = string.Format("*****当前记录更新成功，公司ID：{0},注册ID：{1}.", item.acno, tmpName);
-                                    logger.DebugFormat(msg);
+                                    logger.Debug(msg);
                                     SetMsg(o.f, o.cl, msg, true);
                                 }
                                 else
                                 {
                                     ifailSaveAll++;
                                     msg = string.Format("*****当前记录更新出错，公司ID：{0},注册ID：{1}.", item.acno, tmpName);
-                                    logger.ErrorFormat(msg);
+                                    logger.Error(msg);
                                     SetMsg(o.f, o.cl, msg, true);
                                 }
                             }
@@ -255,7 +255,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                             {
                                 ifailSaveAll++;
                                 msg = string.Format("*****当前更新出错，公司ID：{0},注册ID：{1},Error:{2}. 继续下一个。", item.acno, tmpName, ex);
-                                logger.ErrorFormat(msg);
+                                logger.Error(msg);
                                 SetMsg(o.f, o.cl, msg, true);
                                 continue;
                             }
@@ -272,7 +272,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                     {
                         ifailSaveAll++;
                         msg = string.Format("*****公司ID:{0} 不存在注册ID号。", item.acno);
-                        logger.ErrorFormat(msg);
+                        logger.Error(msg);
                         SetMsg(o.f, o.cl, msg, true);
                     }
 
@@ -304,13 +304,25 @@ namespace EMMS.UpdateOldDBToNew.Service
         /// <returns></returns>
         static bool checkType(string tmpen)
         {
-            return (tmpen.IndexOf("LIMITED", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                                     tmpen.IndexOf("COMPANY", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                                     tmpen.IndexOf("Ltd.", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                                     tmpen.IndexOf("Co.", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                                     tmpen.IndexOf("CO.,", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                                     tmpen.IndexOf("公司", StringComparison.InvariantCultureIgnoreCase) > -1
-                                    ) ? true : false;
+            try
+            {
+                if (string.IsNullOrEmpty(tmpen))
+                {
+                    return false;
+                }
+                return (tmpen.IndexOf("LIMITED", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                                         tmpen.IndexOf("COMPANY", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                                         tmpen.IndexOf("Ltd.", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                                         tmpen.IndexOf("Co.", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                                         tmpen.IndexOf("CO.,", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                                         tmpen.IndexOf("公司", StringComparison.InvariantCultureIgnoreCase) > -1
+                                        ) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                logger.ErrorFormat("*************{0}", ex);
+                return false;
+            }
         }
 
         /// <summary>
@@ -397,7 +409,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                         }
                     }
                     var msg = string.Format("*************写入成功.案件表更新标记表ID:{0}.", tmpAllcountID);
-                    logger.DebugFormat(msg);
+                    logger.Debug(msg);
                     SetMsg(o.f, o.cl, msg, true);
                     scope.Complete();
                     rtnValue = true;
@@ -423,7 +435,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                     var CaseID = dbNew.Insert("m_Case_items", "Tid", true, model).ToString();
 
                     var msg = string.Format("*************写入成功.案件ID:{0},原告@被告：{1}, 新数据库ID:{2}.", model.tkeyNo, model.PlainTiff, CaseID);
-                    logger.DebugFormat(msg);
+                    logger.Debug(msg);
                     SetMsg(o.f, o.cl, msg, true);
 
                     scope.Complete();
@@ -521,7 +533,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             SetMsg(o.f, o.cl, msg, true);
 
             msg = string.Format("*****************[案件表]开始处理更新，时间：{0}**************************", DateTime.Now);
-            logger.DebugFormat(msg);
+            logger.Debug(msg);
             try
             {
                 //案件表，最大的ID
@@ -540,7 +552,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 var getCourtid = dbOld.SingleOrDefault<long>("select isnull(max(courtid),0) from courtUpdateFlag where flag=1");
 
                 msg = string.Format("*************【标记表】中获得的最大courtid:{0}.", getCourtid);
-                logger.DebugFormat(msg);
+                logger.Debug(msg);
                 SetMsg(o.f, o.cl, msg, true);
                 //判断
                 //不存在，取取court（案件表）courtid最小的一条记录
@@ -548,7 +560,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 {
                     getCourtid = dbOld.SingleOrDefault<long>("select isnull(min(courtid),0) from court");
                     msg = string.Format("*************【案件表】中获得的最小courtid:{0}.", getCourtid);
-                    logger.DebugFormat(msg);
+                    logger.Debug(msg);
                     SetMsg(o.f, o.cl, msg, true);
                     isFirst = true;
                 }
@@ -562,7 +574,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                     return;
                 }
                 msg = string.Format("*************获得的最大courtid:{0}.", getCourtid);
-                logger.DebugFormat(msg);
+                logger.Debug(msg);
                 SetMsg(o.f, o.cl, msg, true);
                 //加1获取记录。
                 if (!isFirst)
@@ -573,14 +585,14 @@ namespace EMMS.UpdateOldDBToNew.Service
                 // 如果court（案件表）不存在记录，则courtid继续加1，继续获取，直到一条有效记录。
                 var tmpMinCourt = new court();
                 msg = string.Format("*************案件表，最大的ID:{0}.", icourtMax);
-                logger.DebugFormat(msg);
+                logger.Debug(msg);
                 SetMsg(o.f, o.cl, msg, true);
 
                 while (getCourtid <= icourtMax)
                 {
 
                     msg = string.Format("*************开始取案件表记录A，courtid:{0}.", getCourtid);
-                    logger.DebugFormat(msg);
+                    logger.Debug(msg);
                     SetMsg(o.f, o.cl, msg, true);
 
                     tmpMinCourt = GetCourt(getCourtid);
@@ -598,14 +610,14 @@ namespace EMMS.UpdateOldDBToNew.Service
                             else
                             {
                                 msg = string.Format("*************新数库中已存在:案件表记录A，courtid:{0}.，取下一条:{1}", getCourtid, getCourtid + 1);
-                                logger.DebugFormat(msg);
+                                logger.Debug(msg);
                                 SetMsg(o.f, o.cl, msg, true);
                             }
                         }
                         else
                         {
                             msg = string.Format("*************标记表中存在:案件表记录A，courtid:{0}.，取下一条:{1}", getCourtid, getCourtid + 1);
-                            logger.DebugFormat(msg);
+                            logger.Debug(msg);
                             SetMsg(o.f, o.cl, msg, true);
                         }
                     }
@@ -632,7 +644,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                             msg = string.Format("*************案件表记录A，courtid:{0}.不存在，取下一条大于当前Id的最小值:{1}", getCourtid, tmpNextMin);
                         }
 
-                        logger.DebugFormat(msg);
+                        logger.Debug(msg);
                         SetMsg(o.f, o.cl, msg, true);
                     }
                     getCourtid++;
@@ -641,7 +653,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 if (getCourtid > icourtMax)
                 {
                     msg = string.Format("##########################*************已全部处理完成......案件表，最大的ID:{0}.当前已经处理到：{1},。。。", icourtMax, getCourtid);
-                    logger.DebugFormat(msg);
+                    logger.Debug(msg);
                     SetMsg(o.f, o.cl, msg, true);
                     SetEnable(o.f, o.btn, true);
                     SetEnable(o.f, o.btn2, true);
@@ -813,7 +825,10 @@ namespace EMMS.UpdateOldDBToNew.Service
                 //getItem.CheckField = item.CheckField;
 
                 //关键字处理，放其他
-                getItem.Parties = getItem.PlainTiff + " @and@ " + getItem.Defendant;
+                if (!string.IsNullOrEmpty(getItem.PlainTiff) || !string.IsNullOrEmpty(getItem.Defendant))
+                {
+                    getItem.Parties = getItem.PlainTiff + " @and@ " + getItem.Defendant;
+                }
 
                 if (checkPDtoOther(getItem.Parties))
                 {
@@ -841,7 +856,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 else
                 {
                     msg = string.Format("******************更新失败。案件IDCourtid:{0}", getCourtid);
-                    logger.ErrorFormat(msg);
+                    logger.Error(msg);
                     SetMsg(o.f, o.cl, msg, true);
                 }
 
@@ -880,8 +895,9 @@ namespace EMMS.UpdateOldDBToNew.Service
 
                 return v;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.ErrorFormat("*************{0}", ex);
                 return v;
             }
         }
@@ -898,7 +914,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             }
             catch (Exception ex)
             {
-
+                logger.ErrorFormat("*************{0}", ex);
                 return input;
             }
         }
@@ -917,16 +933,28 @@ namespace EMMS.UpdateOldDBToNew.Service
         /// <returns></returns>
         static bool checkCourt(string tmpen)
         {
-            return (
-                tmpen.IndexOf("& co", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("associates", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("parters", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("sohicitors", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("hotar", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("LLP. In person", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("legal department", StringComparison.InvariantCultureIgnoreCase) > -1 ||
-                tmpen.IndexOf("department of justice", StringComparison.InvariantCultureIgnoreCase) > -1
-                ) ? true : false;
+            try
+            {
+                if (string.IsNullOrEmpty(tmpen))
+                {
+                    return false;
+                }
+                return (
+                    tmpen.IndexOf("& co", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("associates", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("parters", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("sohicitors", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("hotar", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("LLP. In person", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("legal department", StringComparison.InvariantCultureIgnoreCase) > -1 ||
+                    tmpen.IndexOf("department of justice", StringComparison.InvariantCultureIgnoreCase) > -1
+                    ) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                logger.ErrorFormat("*************{0}", ex);
+                return false;
+            }
         }
         /// <summary>
         /// h.	原被告互相告的案子通过以下关键字区分： 
@@ -939,10 +967,24 @@ namespace EMMS.UpdateOldDBToNew.Service
         /// <returns></returns>
         static bool checkPDtoOther(string tmpen)
         {
-            return (
+            try
+            {
+                if (string.IsNullOrEmpty(tmpen))
+                {
+                    return false;
+                }
+                return (
                 tmpen.IndexOf("defend in counterclaim", StringComparison.InvariantCultureIgnoreCase) > -1 ||
                 tmpen.IndexOf("claimment in counterclaim", StringComparison.InvariantCultureIgnoreCase) > -1
                 ) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                logger.ErrorFormat("*************{0}", ex);
+                return false;
+            }
+
         }
         /// <summary>
         /// 判断是否早已更新的记录,新数据库
