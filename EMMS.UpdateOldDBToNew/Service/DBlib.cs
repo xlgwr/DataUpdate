@@ -57,7 +57,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                         }
                         else
                         {
-                            cl.Text = msg + "\n" + cl.Text; 
+                            cl.Text = msg + "\n" + cl.Text;  
                         }
 
                         if (cl.Text.Length > 1024 * 10)
