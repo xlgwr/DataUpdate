@@ -60,9 +60,9 @@ namespace EMMS.UpdateOldDBToNew.Service
                             cl.Text = msg + "\n" + cl.Text;
                         }
 
-                        if (cl.Text.Length > 1024 * 100)
+                        if (cl.Text.Length > 1024 * 10)
                         {
-                            cl.Text = cl.Text.Substring(0, 1024 * 100) + "......................";
+                            cl.Text = cl.Text.Substring(0, 1024 * 10) + "......................";
                         }
                     }));
             }
@@ -307,6 +307,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 SetEnable(o.f, o.btn, true);
                 SetEnable(o.f, o.btn2, true);
                 //return ex.Message;
+                throw ex;
             }
         }
         /// <summary>
@@ -870,6 +871,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 //throw ex;
                 //循环，递归处理,下条。
                 //UpdateCourtToNewDB(t);
+                throw ex;
             }
         }
         /// <summary>
