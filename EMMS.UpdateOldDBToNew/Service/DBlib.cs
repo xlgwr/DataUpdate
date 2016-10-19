@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -57,7 +58,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                         }
                         else
                         {
-                            cl.Text = msg + "\n" + cl.Text;  
+                            cl.Text = msg + "\n" + cl.Text;
                         }
 
                         if (cl.Text.Length > 1024 * 10)
@@ -68,18 +69,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             }
             catch (Exception ex)
             {
-                logger.ErrorFormat("**********{0}.", ex);
-                cl.Invoke(new Action(delegate()
-                {
-                    if (string.IsNullOrEmpty(cl.Text))
-                    {
-                        cl.Text = msg;
-                    }
-                    else
-                    {
-                        cl.Text = msg + "\n" + cl.Text;
-                    }
-                }));
+                _form1 = f;                
             }
         }
 
@@ -99,11 +89,7 @@ namespace EMMS.UpdateOldDBToNew.Service
             }
             catch (Exception ex)
             {
-                logger.ErrorFormat("**********{0}.", ex);
-                cl.Invoke(new Action(delegate()
-                {
-                    cl.Enabled = isenable;
-                }));
+                _form1 = f;               
             }
         }
         #region cust_approved（前端帐号）及 am_cust_approved（自动监察帐号）
@@ -844,6 +830,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                         getItem.Other = tmpOther1;
                     }
                 }
+                getItem.Remark = tmpMinCourt.Caseno + "," + tmpMinCourt.PlainRef3 + "," + tmpAllCountList;
                 ///////////保存
                 if (AddmCaseItems(getItem, o))
                 {
@@ -859,7 +846,7 @@ namespace EMMS.UpdateOldDBToNew.Service
                 }
 
                 //循环，递归处理，下条。
-                UpdateCourtToNewDB(t);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(DBlib.UpdateCourtToNewDB), t);
             }
             catch (Exception ex)
             {
