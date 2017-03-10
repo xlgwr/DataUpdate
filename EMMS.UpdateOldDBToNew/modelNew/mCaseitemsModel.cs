@@ -19,6 +19,10 @@ namespace EMMS.UpdateOldDBToNew.modelNew
     [PetaPoco.PrimaryKey("Tid")]
     public class m_Case_items : entityItems
     {
+        public m_Case_items()
+        {
+            Enable = 1;
+        }
         public long htmlID { get; set; }
 
 
@@ -57,7 +61,7 @@ namespace EMMS.UpdateOldDBToNew.modelNew
         /// 开庭日期
         /// </summary>
         // [Column(TypeName = "text")]
-        public string CourtDay { get; set; }
+        public DateTime CourtDay { get; set; }
 
 
 
@@ -147,5 +151,11 @@ namespace EMMS.UpdateOldDBToNew.modelNew
         /// 被告代表
         /// </summary>
         public virtual string Representation_D { get; set; }
+
+        /// <summary>
+        /// 0:禁用 1:启用
+        /// </summary>
+        public virtual int Enable { get; set; }
+
     }
 }

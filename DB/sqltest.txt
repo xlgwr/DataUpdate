@@ -1,0 +1,17 @@
+-- 巴拿马处理
+-- 新数据
+-- delete t_PublicRelation where  TableId='59';
+-- delete t_Address where AddressID>77;
+-- delete s_Company where Entityid>='4498547';
+-- delete s_Person where Entityid>='4498547';
+-- delete t_Panama;
+
+--select * from t_Panama;
+--select * from t_Address where AddressID>77
+--select * from s_Company where Entityid>='4498547'
+
+
+-- 初始化旧数据，一便更新。
+-- 旧数据处理
+-- UPDATE EntitysAll set tStatus='1' where tStatus='5';
+-- UPDATE EntitysAll set Entityid='0';-- where tStatus='5';

@@ -27,9 +27,10 @@ namespace EMMS.UpdateOldDBToNew
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Tag = tittle;
             this.Text = tittle;
-            this.AcceptButton = button1;
-            this.button1.Focus();
-
+            this.AcceptButton = button2;
+            this.button2.Focus();
+           
+            
         }
 
         void Form1_Resize(object sender, EventArgs e)
@@ -47,8 +48,8 @@ namespace EMMS.UpdateOldDBToNew
             try
             {
                 this.Text = tittle + "-->正在 " + button1.Text;
-                objT t = new objT() { f = this, cl = richTextBox1, btn= button1, btn2= button2 };
-                ThreadPool.QueueUserWorkItem(new WaitCallback(DBlib.UpdateCustOldToNew),t);
+                objT t = new objT() { f = this, cl = richTextBox1, btn = button1, btn2 = button2, btn3 = button3 };
+                ThreadPool.QueueUserWorkItem(new WaitCallback(DBlib.UpdateCustOldToNew), t);
                 //DBlib.UpdateCustOldToNew(o);
             }
             catch (Exception ex)
@@ -63,8 +64,24 @@ namespace EMMS.UpdateOldDBToNew
             try
             {
                 this.Text = tittle + "-->正在 " + button2.Text;
-                objT t = new objT() { f = this, cl = richTextBox1, btn = button2, btn2 = button1 };
+                objT t = new objT() { f = this, cl = richTextBox1, btn = button2, btn2 = button1, btn3 = button3 };
                 ThreadPool.QueueUserWorkItem(new WaitCallback(DBlib.UpdateCourtToNewDB), t);
+                //DBlib.UpdateCourtToNewDB(o);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Text = tittle + "-->正在 " + button3.Text;
+                objT t = new objT() { f = this, cl = richTextBox1, btn = button3, btn3 = button2, btn2 = button1 };
+                ThreadPool.QueueUserWorkItem(new WaitCallback(DBlib.UpdatePanamaDBToNewDB), t);
                 //DBlib.UpdateCourtToNewDB(o);
             }
             catch (Exception ex)

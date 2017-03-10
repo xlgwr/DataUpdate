@@ -4,14 +4,14 @@ Navicat SQL Server Data Transfer
 Source Server         : S1.6
 Source Server Version : 120000
 Source Host           : 192.168.1.6:1433
-Source Database       : EMMS_WebGetData
+Source Database       : EMMS_UpdateTest
 Source Schema         : dbo
 
 Target Server Type    : SQL Server
 Target Server Version : 120000
 File Encoding         : 65001
 
-Date: 2016-10-19 09:16:03
+Date: 2016-10-28 09:53:23
 */
 
 
@@ -60,7 +60,7 @@ CREATE TABLE [dbo].[m_Case_items] (
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[m_Case_items]', RESEED, 57375)
+DBCC CHECKIDENT(N'[dbo].[m_Case_items]', RESEED, 2118842)
 GO
 
 -- ----------------------------
@@ -72,15 +72,12 @@ GO
 CREATE INDEX [IX_addtime] ON [dbo].[m_Case_items]
 ([addtime] ASC) 
 GO
+CREATE INDEX [IX_m_Case_itemsTkeyNo] ON [dbo].[m_Case_items]
+([tkeyNo] ASC) 
+GO
 
 -- ----------------------------
 -- Primary Key structure for table m_Case_items
 -- ----------------------------
 ALTER TABLE [dbo].[m_Case_items] ADD PRIMARY KEY ([Tid], [Language], [tkeyNo], [tIndex])
-GO
-
--- ----------------------------
--- Foreign Key structure for table [dbo].[m_Case_items]
--- ----------------------------
-ALTER TABLE [dbo].[m_Case_items] ADD FOREIGN KEY ([htmlID]) REFERENCES [dbo].[m_Case_main] ([Tid]) ON DELETE NO ACTION ON UPDATE NO ACTION
 GO

@@ -18,13 +18,41 @@ namespace EMMS.UpdateOldDBToNew.modelOld
         /// 法院ID
         /// </summary>
         public virtual long courtid { get; set; }
+
+
+        private string _Caseno = "";
         /// <summary>
         /// 案件编号
         /// H1234/2002
         /// 旧的案件编号，不完整，当手动（PlainRef3）和爬虫（Defref3）都没有时，再处理(HXXX123/1999)
         /// 
         /// </summary>
-        public virtual string Caseno { get; set; }
+        public virtual string Caseno
+        {
+            get
+            {
+                return _Caseno;
+            }
+            set
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        _Caseno = value.ToUpper().Trim();
+                    }
+                    else
+                    {
+                        _Caseno = "";
+                    }
+                }
+                catch (Exception)
+                {
+                    _Caseno = value;
+                }
+
+            }
+        }
         /// <summary>
         /// 原告
         /// </summary>
@@ -82,7 +110,25 @@ namespace EMMS.UpdateOldDBToNew.modelOld
         /// <summary>
         /// 案件日期
         /// </summary>
-        public virtual DateTime? ActionDate { get; set; }
+        private DateTime _ActionDate;
+        public virtual DateTime ActionDate
+        {
+            get
+            {
+                return _ActionDate;
+            }
+            set
+            {
+                try
+                {
+                    _ActionDate = value.Date;
+                }
+                catch (Exception)
+                {
+                    _ActionDate = value;
+                }
+            }
+        }
         /// <summary>
         /// 创建日期
         /// </summary>

@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>update.ico</ApplicationIcon>
+    <ApplicationIcon>update2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -63,6 +63,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebGetDll">
+      <HintPath>..\..\EMMS.Service\packages\WebGetDll.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="acom\Encryption.cs" />
@@ -70,6 +73,8 @@
     <Compile Include="DB\base\entityItems.cs" />
     <Compile Include="DB\base\entityMain.cs" />
     <Compile Include="DB\base\entityTID.cs" />
+    <Compile Include="DB\base\model.cs" />
+    <Compile Include="DB\base\modelTID.cs" />
     <Compile Include="DB\GridPager.cs" />
     <Compile Include="DB\PetaPoco.cs" />
     <Compile Include="Form1.cs">
@@ -78,13 +83,16 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="modelNew\CaseFormVm.cs" />
     <Compile Include="modelNew\ContactPersonModel.cs" />
     <Compile Include="modelNew\mCaseitemsModel.cs" />
     <Compile Include="modelNew\MemberComanyModel.cs" />
     <Compile Include="modelNew\MemberModel.cs" />
+    <Compile Include="modelOld\Connections.cs" />
     <Compile Include="modelOld\courtUpdateFlag.cs" />
     <Compile Include="modelOld\court.cs" />
     <Compile Include="modelOld\custApprovedModel.cs" />
+    <Compile Include="modelOld\EntitysAll.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\DBlib.cs" />
@@ -116,10 +124,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="update.ico" />
+    <Content Include="update2.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

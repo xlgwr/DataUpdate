@@ -17,12 +17,7 @@ namespace EMMS.UpdateOldDBToNew.modelOld
         /// <summary>
         /// 法院ID,递增表,每次加1.
         /// </summary>
-        public virtual long courtid { get; set; }
-        
-        /// <summary>
-        /// 0:未更新，1：已更新
-        /// </summary>
-        public virtual int flag { get; set; }
+        public virtual DateTime Actiondate { get; set; }        
 
     }
 }
